@@ -15,7 +15,7 @@
         "Id": "org.kde.trans",
         "License": "GPL-2.0+",
         "Name": "Desktopcontainment-trans",
-        "Website": ""
+        "Website": "https://github.com/thevladsoft/transparentfolderview-plasma6"
         "Version":  "1.0"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
