@@ -15,8 +15,8 @@ import org.kde.ksvg 1.0 as KSvg
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
 import org.kde.kirigami 2.20 as Kirigami
 
-import org.kde.private.desktopcontainment.desktop 0.1 as Desktop
-import org.kde.private.desktopcontainment.folder 0.1 as Folder
+// import org.kde.private.desktopcontainment.desktop 0.1 as Desktop
+import org.kde.private.desktopcontainment.folder as Folder
 
 import org.kde.plasma.private.containmentlayoutmanager 1.0 as ContainmentLayoutManager
 
@@ -34,7 +34,25 @@ ContainmentItem {
     // TODO remove once it gains that feature (perhaps optionally?)
     compactRepresentation: (isFolder && !isContainment) ? compactRepresentation : null
 
-    objectName: isFolder ? "folder" : "desktop"
+    /*NEW...*/
+    //objectName: isFolder ? "folder" : "desktop"
+    objectName:"folder"
+    Plasmoid.backgroundHints: Plasmoid.configuration.userdefinedback ? PlasmaCore.Types.NoBackground :PlasmaCore.Types.ShadowBackground | PlasmaCore.Types.ConfigurableBackground
+    
+    Rectangle {
+            id: fondo
+            x: root,x
+            y: root,y
+            visible: Plasmoid.configuration.userdefinedback
+            color: Plasmoid.configuration.usethemebackcolor? Kirigami.Theme.backgroundColor : Plasmoid.configuration.usercolor
+//             color: "gray"
+            width: root.width
+            height: root.height
+//             radius: width/2.
+            opacity: Plasmoid.configuration.opacityslider/100.
+    } 
+    
+    /*...NEW*/
 
     width: isPopup ? undefined : preferredWidth(false) // Initial size when adding to e.g. desktop.
     height: isPopup ? undefined : preferredHeight(false) // Initial size when adding to e.g. desktop.
@@ -51,10 +69,10 @@ ContainmentItem {
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
 
-    property bool isFolder: (Plasmoid.pluginName === "org.kde.plasma.folder")
+    /*NEW*/property bool isFolder:true// (Plasmoid.pluginName === "org.kde.plasma.folder")
     property bool isContainment: Plasmoid.isContainment
     property bool isPopup: (Plasmoid.location !== PlasmaCore.Types.Floating)
-    property bool useListViewMode: isPopup && Plasmoid.configuration.viewMode === 0
+    /*NEW*/property bool useListViewMode: /*isPopup && */Plasmoid.configuration.viewMode /*=== 0*/
 
     property Component appletAppearanceComponent
     property Item toolBox

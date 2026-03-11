@@ -13,7 +13,7 @@ import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.config // for KAuthorized
 import org.kde.kirigami 2.20 as Kirigami
 
-import org.kde.private.desktopcontainment.folder 0.1 as Folder
+import org.kde.private.desktopcontainment.folder  as Folder
 
 FocusScope {
     id: folderViewLayerComponent
@@ -133,6 +133,13 @@ FocusScope {
             iconSize = Plasmoid.configuration.iconSize;
         }
     }
+    
+    /*NEW*/
+    PlasmaComponents.Label {
+        id:warningicons
+        text: i18n("Icons are hidden, double click to show again")
+        visible: !plasmoid.configuration.iconsHidden && plasmoid.configuration.warningHidden
+    }/*NEW*/
 
     PlasmaComponents.Label {
         anchors.fill: parent
@@ -249,23 +256,23 @@ FocusScope {
             Plasmoid.configuration.sortMode = sortMode;
         }
 
-        onPositionsChanged: {
-            saveTimer.restart()
-        }
+        // onPositionsChanged: {
+        //     saveTimer.restart()
+        // }
 
-        onPerStripeChanged: {
-            folderView.positions = getPositions();
-        }
+        // onPerStripeChanged: {
+        //     folderView.positions = getPositions();
+        // }
 
-        Timer {
-            id: saveTimer
-            interval: Kirigami.Units.humanMoment
-            onTriggered: savePositions(folderView.positions)
-        }
+        // Timer {
+        //     id: saveTimer
+        //     interval: Kirigami.Units.humanMoment
+        //     // onTriggered: savePositions(folderView.positions)
+        // }
 
         Component.onCompleted: {
             folderView.sortMode = Plasmoid.configuration.sortMode;
-            folderView.positions = getPositions();
+            // folderView.positions = getPositions();
         }
     }
 
@@ -277,7 +284,10 @@ FocusScope {
 
             // If we bind height to visible, it will be invisible initially (since "visible"
             // propagates recursively) and that confuses the Label, hence the temp property.
-            readonly property bool active: (Plasmoid.configuration.labelMode !== 0)
+            // readonly property bool active: (Plasmoid.configuration.labelMode !== 0)
+            /*NEW*/
+            readonly property bool active: (plasmoid.configuration.labelMode !== 0 && !warningicons.visible)
+/*NEW*/
 
             readonly property bool showPin: root.isPopup && root.compactRepresentationItem && root.compactRepresentationItem.visible
 

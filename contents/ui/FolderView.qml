@@ -14,7 +14,7 @@ import org.kde.kirigami 2.20 as Kirigami
 import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.kquickcontrolsaddons 2.0
 
-import org.kde.private.desktopcontainment.folder 0.1 as Folder
+import org.kde.private.desktopcontainment.folder as Folder
 import "code/FolderTools.js" as FolderTools
 
 FocusScope {
@@ -31,7 +31,8 @@ FocusScope {
     property alias url: dir.url
     property alias status: dir.status
     property alias perStripe: positioner.perStripe
-    property alias positions: positioner.positions
+    property alias positionerApplet: positioner.applet
+    // property alias positions: positioner.positions
     property alias errorString: dir.errorString
     property alias dragging: dir.dragging
     property alias dragInProgressAnywhere: dir.dragInProgressAnywhere
@@ -57,6 +58,13 @@ FocusScope {
     property Item backButton: null
     property var dialog: null
     property Item editor: null
+    
+    /*NEW*/property bool iconos: plasmoid.configuration.iconsHidden//true
+        Binding {
+        target: plasmoid.configuration
+        property: "iconsHidden"
+        value: iconos
+    }
 
     property int previouslySelectedItemIndex: -1
 
@@ -233,6 +241,7 @@ FocusScope {
         property int dragY: -1
         property var cPress: null
         property bool doubleClickInProgress: false
+        /*NEW*/property bool doubleOnNothing: false
 
         acceptedButtons: {
             if (hoveredItem === null && main.isRootView) {
@@ -364,15 +373,31 @@ FocusScope {
                         pressedItem.toolTip.hideToolTip();
                     }
                 }
-                clearPressState();
+                // clearPressState();
                 if (hoveredItem) {
                     dir.openContextMenu(hoveredItem, mouse.modifiers);
                 }
-            }
+            }clearPressState();
         }
 
         onClicked: mouse => {
             clearPressState();
+            
+/*NEW...*/            
+            if(hoveredItem == null){
+                if(doubleOnNothing){
+                    doubleOnNothing=false
+                    if(plasmoid.configuration.doubleclickhide && !isPopup){
+                        iconos = !iconos
+                    }
+                }else{
+                    doubleOnNothing=true
+                    doubleOnNothingTimer.interval = Qt.styleHints.mouseDoubleClickInterval;
+                    doubleOnNothingTimer.start();
+                }
+                
+            }
+/*...NEW*/
 
             if (mouse.button === Qt.RightButton ||
                 (editor && childAt(mouse.x, mouse.y) === editor)) {
@@ -612,6 +637,18 @@ FocusScope {
                 listener.doubleClickInProgress = false;
             }
         }
+        
+        /*NEW...*/
+        
+        Timer {
+            id: doubleOnNothingTimer
+
+            onTriggered: {
+                 listener.doubleOnNothing= false
+//                 iconos= iconos?false:true
+            }
+        }
+        /*...NEW*/
 
         Timer {
             id: hoverActivateTimer
@@ -733,6 +770,10 @@ FocusScope {
                 }
 
                 delegate: FolderItemDelegate {
+                    /*NEW...*/
+                    id: foldericonos
+                    visible: iconos
+                    /*...NEW*/
                     width: gridView.cellWidth
                     height: gridView.cellHeight
                 }
@@ -1180,6 +1221,13 @@ FocusScope {
                     function onIconSizeChanged() {
                         gridView.iconSize = gridView.makeIconSize();
                     }
+                    
+                    /*NEW...*/
+                    onDoubleclickhideChanged:{
+                        if(!plasmoid.configuration.doubleclickhide){iconos= true}
+                        
+                    }
+                    /*...NEW*/
 
                     function onViewModeChanged() {
                         gridView.iconSize = gridView.makeIconSize();

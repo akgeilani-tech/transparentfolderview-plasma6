@@ -15,10 +15,12 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.iconthemes as KIconThemes
 import org.kde.config // for KAuthorized
 import org.kde.kirigami 2.20 as Kirigami
+import org.kde.kcmutils as KCM
 
-import org.kde.private.desktopcontainment.folder 0.1 as Folder
+import org.kde.private.desktopcontainment.folder as Folder
 
-Item {
+// Item
+ KCM.SimpleKCM {
     id: configIcons
 
     property bool isPopup: (Plasmoid.location !== PlasmaCore.Types.Floating)
@@ -41,6 +43,9 @@ Item {
     property alias cfg_iconSize: iconSize.value
     property alias cfg_labelWidth: labelWidth.currentIndex
     property alias cfg_textLines: textLines.value
+    
+    /*NEW*/property alias cfg_doubleclickhide: doubleclick.checked
+    property alias cfg_warningHidden: warning.checked
 
     readonly property bool lockedByKiosk: !KAuthorized.authorize("editable_desktop_icons")
 
@@ -117,6 +122,20 @@ Item {
             visible: isPopup
             Kirigami.FormData.isSection: true
         }
+        
+        /*NEW...*/
+        CheckBox {
+            id: doubleclick
+
+            text: i18n("Hide icons with a double click in an empty area")
+        }
+                CheckBox {
+            id: warning
+            visible: doubleclick.visible && doubleclick.checked
+
+            text: i18n("Show a message when icons are hidden")
+        }
+        /*...NEW*/
 
 
 
@@ -213,13 +232,13 @@ Item {
         // View Mode section (only if we're a pop-up)
         ComboBox {
             id: viewMode
-            visible: isPopup
+            // visible: isPopup
             Layout.fillWidth: true
 
             Kirigami.FormData.label: i18nc("whether to use icon or list view", "View mode:")
 
-            model: [i18nc("@item:inlistbox show icons in a list", "List"),
-                    i18nc("@item:inlistbox show icons in a grid", "Grid")]
+            model: [i18nc("@item:inlistbox show icons in a grid", "Grid"),
+                            i18nc("@item:inlistbox show icons in a list", "List")]
         }
 
 
