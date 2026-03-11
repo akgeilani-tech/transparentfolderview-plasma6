@@ -135,5 +135,65 @@
       <label>Show hidden files.</label>
       <default>false</default>
     </entry>
+    
+<!--     NEW... -->
+    <entry name="doubleclickhide" type="Bool" hidden="true">
+      <label></label>
+      <default>true</default>
+    </entry>
+    <entry name="iconsHidden" type="Bool">
+      <label> Whether currently the icons are hidden or not if user uses the double click to hide/unhide them</label>
+      <default>true</default>
+    </entry>
+    
+    <entry name="warningHidden" type="Bool">
+      <label> Should it show a message when icons are hidden</label>
+      <default>true</default>
+    </entry>
+
+    <entry name="userdefinedback" type="Bool">
+      <label>.</label>
+      <default>false</default>
+    </entry>
+    
+    <entry name="usethemebackcolor" type="Bool">
+      <label>.</label>
+      <default>true</default>
+    </entry>
+    
+    <entry name="dolphin" type="Bool">
+      <label>Whether to show an icon to open folder on dolphin in list view mode.</label>
+      <default>true</default>
+    </entry>
+    <entry name="columnas" type="Int">
+      <label>The (maximum) number of columns in List View.</label>
+      <default>1</default>
+    </entry>
+    <entry name="iconHoverEffect" type="Bool">
+      <label>Whether icons should change in appearance when the mouse pointer is above them.</label>
+      <default>true</default>
+    </entry>
+    
+    <entry name="usercolor" type="String">
+      <label>.</label>
+      <default>gray</default>
+    </entry>
+    
+    <entry name="opacityslider" type="Int">
+      <label>..</label>
+      <default>50</default>
+    </entry>
+    
+    <entry name="forcerefresh" type="Bool">
+      <label>Force refresh every refreshtime seconds</label>
+      <default>false</default>
+    </entry>
+    
+    <entry name="refreshtime" type="Int">
+      <label>Force refresh time in seconds</label>
+      <default>5</default>
+    </entry>
+    
+<!--     ...NEW -->
   </group>
 </kcfg>
