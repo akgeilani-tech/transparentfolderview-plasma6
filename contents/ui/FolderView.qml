@@ -556,7 +556,8 @@ FocusScope {
         Component {
             id: rubberBandObject
 
-            Folder.RubberBand {
+            // Folder.RubberBand {
+            Rectangle {
                 id: rubberBand
 
                 width: 0
